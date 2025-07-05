@@ -25,6 +25,8 @@ This project was developed as a personal learning initiative to master Svelte UI
 - **Tailwind CSS**: Utility-first CSS framework
 - **Yarn**: Package manager
 - **Custom Router**: Hand-built SPA routing system
+- **Vercel**: Deployment platform
+- **CORS Proxy**: Custom API proxy for handling CORS issues
 
 ## 📚 Learning Objectives
 
@@ -36,6 +38,8 @@ This project encompasses several key learning areas:
 - **Local Storage**: Client-side data persistence
 - **UI/UX Design**: Modern interface design principles
 - **Code Organization**: Clean, maintainable code structure
+- **CORS Handling**: Implementing proxy solutions for API access
+- **Vercel Deployment**: Cloud deployment and serverless functions
 
 ## 🏗️ Architecture
 
@@ -45,6 +49,8 @@ The application follows modern frontend architecture principles:
 - **Store Pattern**: Centralized state management using Svelte stores
 - **Custom Routing**: Self-implemented SPA routing for learning purposes
 - **Responsive Design**: Mobile-first approach using Tailwind CSS
+- **API Proxy**: Custom CORS proxy in the `/api` folder for handling cross-origin requests
+- **Serverless Deployment**: Optimized for Vercel's serverless environment
 
 ## 🚦 Getting Started
 
@@ -88,7 +94,39 @@ yarn build
 yarn preview
 ```
 
+## 🌐 CORS Handling
+
+This application implements a custom CORS proxy solution to handle cross-origin requests when fetching football club data. The proxy is located in the `/api` folder and deployed as a serverless function on Vercel.
+
+### Important Note
+
+If you encounter issues with data fetching, you may need to activate the CORS proxy service first:
+
+1. Visit: https://cors-anywhere.herokuapp.com/corsdemo
+2. Click "Request temporary access to the demo server"
+3. Return to the application and refresh
+
+This step is required due to CORS restrictions when accessing external APIs from the browser.
+
+## 🚀 Deployment
+
+This application is deployed on Vercel, leveraging its serverless architecture for optimal performance and scalability. The deployment includes:
+
+- Static site hosting
+- Serverless functions for API proxy
+- Automatic deployments from GitHub
+- Global CDN distribution
+
 ## 🎨 Design Philosophy
+
+The application emphasizes clean, modern design with focus on:
+
+- User-friendly navigation
+- Responsive layouts
+- Accessible interface elements
+- Performance optimization
+
+## 🔧 Technical Implementation
 
 The application emphasizes clean, modern design with focus on:
 
@@ -114,6 +152,10 @@ Implements browser storage for persisting user preferences and cached data.
 ### Component Architecture
 
 Organized into reusable components following best practices for maintainability and scalability.
+
+### CORS Proxy Implementation
+
+Custom serverless function deployed on Vercel to handle cross-origin requests, enabling secure access to external football APIs without exposing API keys or dealing with browser CORS restrictions.
 
 ## 📱 PWA Features
 
@@ -141,6 +183,9 @@ Through this project, I've gained hands-on experience with:
 - Progressive Web App development
 - Custom routing implementation
 - Responsive design with Tailwind CSS
+- CORS handling and proxy implementation
+- Vercel deployment and serverless functions
+- API integration and data fetching strategies
 
 ---
 
