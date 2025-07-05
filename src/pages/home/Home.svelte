@@ -65,7 +65,7 @@
             error = null;
             await teamsService.getTeams(forceRefresh);
             if (forceRefresh) {
-                console.log("Teams data refreshed successfully");
+                console.info("Teams data refreshed successfully");
             }
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
@@ -100,7 +100,7 @@
             filteredTeams = [];
             error = null;
             closeClearCacheModal();
-            console.log("Cache cleared successfully");
+            console.info("Cache cleared successfully");
         } catch (err) {
             error = "Failed to clear cache";
             console.error("Error clearing cache:", err);
