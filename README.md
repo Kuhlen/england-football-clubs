@@ -1,10 +1,10 @@
 # England Football Clubs
 
-A modern Single Page Application (SPA) built with Svelte 5, featuring English football club data and designed as a Progressive Web App (PWA).
+A modern Single Page Application (SPA) built with Svelte 5, featuring England football club data and designed as a Progressive Web App (PWA).
 
 ## 🚀 Overview
 
-This application serves as a comprehensive learning project for exploring Svelte 5's capabilities while creating a functional football club information platform. The app fetches and displays data about English football clubs in an intuitive, responsive interface.
+This application serves as a comprehensive learning project for exploring Svelte 5's capabilities while creating a functional football club information platform. The app fetches and displays data about England football clubs in an intuitive, responsive interface.
 
 ## 🎯 Purpose
 
@@ -15,7 +15,7 @@ This project was developed as a personal learning initiative to master Svelte UI
 - **Progressive Web App (PWA)**: Installable and works offline
 - **Single Page Application**: Smooth navigation without page reloads
 - **Responsive Design**: Optimized for all device sizes
-- **Real-time Data**: Fetches live English football club information
+- **Real-time Data**: Fetches live England football club information
 - **Modern UI**: Clean and professional interface design
 
 ## 🛠️ Technologies Used
