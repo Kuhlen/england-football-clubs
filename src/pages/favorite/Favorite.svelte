@@ -144,7 +144,7 @@
             favoriteTeams = [];
             error = null;
             closeClearAllModal();
-            console.log("All favorites cleared successfully");
+            console.info("All favorites cleared successfully");
         } catch (err) {
             console.error("Error clearing all favorites:", err);
             error = "Failed to clear all favorites";
