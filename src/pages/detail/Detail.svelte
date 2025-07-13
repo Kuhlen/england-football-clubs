@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { routeParams } from "../../router";
+    import { teamsStore, teamsService } from "../../stores/cache.store";
     import type { TeamDetail } from "../../types/team.type";
 
     // Import components
@@ -15,15 +16,18 @@
     let team = $state<TeamDetail | null>(null);
     let loading = $state<boolean>(false);
     let error = $state<string | null>(null);
+    let isNotFound = $state<boolean>(false);
     let isFavorited = $state<boolean>(false);
+    let validatingTeamId = $state<boolean>(false);
 
     // Derived values
     const teamId = $derived($routeParams.id);
+    const teams = $derived($teamsStore);
 
     // Effects
     $effect(() => {
         if (teamId) {
-            fetchTeamDetail(teamId);
+            validateAndFetchTeam();
             checkIfFavorited();
         }
     });
@@ -34,24 +38,97 @@
     });
 
     /**
+     * Validates if team ID exists in the teams list and fetches detail if valid
+     */
+    async function validateAndFetchTeam(): Promise<void> {
+        try {
+            validatingTeamId = true;
+            error = null;
+            isNotFound = false;
+
+            // First, ensure we have teams data loaded
+            await ensureTeamsLoaded();
+
+            // Validate if team ID exists in the teams list
+            const isValidTeamId = await validateTeamId(Number(teamId));
+
+            if (!isValidTeamId) {
+                isNotFound = true;
+                return;
+            }
+
+            // If valid, fetch detailed team information
+            await fetchTeamDetail(teamId);
+        } catch (err) {
+            console.error("Error in validateAndFetchTeam:", err);
+            const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+
+            if (errorMessage.toLowerCase().includes("404") || errorMessage.toLowerCase().includes("not found")) {
+                isNotFound = true;
+            } else {
+                error = errorMessage;
+            }
+        } finally {
+            validatingTeamId = false;
+        }
+    }
+
+    /**
+     * Ensures teams data is loaded from cache or API
+     */
+    async function ensureTeamsLoaded(): Promise<void> {
+        // If teams store is empty, try to load from cache or API
+        if (teams.length === 0) {
+            try {
+                await teamsService.getTeams();
+            } catch (err) {
+                console.warn("Failed to load teams for validation:", err);
+                // Continue anyway, let the API call handle the validation
+            }
+        }
+    }
+
+    /**
+     * Validates if a team ID exists in the current teams list
+     * @param {number} id - Team ID to validate
+     * @returns {Promise<boolean>} True if team ID is valid, false otherwise
+     */
+    async function validateTeamId(id: number): Promise<boolean> {
+        // If we have teams loaded, check against the list
+        if (teams.length > 0) {
+            const teamExists = teams.some((team) => team.id === id);
+            if (!teamExists) {
+                console.warn(`Team ID ${id} not found in teams list`);
+                return false;
+            }
+            return true;
+        }
+
+        // If no teams loaded, we can't validate locally
+        // Let the API call determine if it's valid
+        console.warn("No teams loaded for validation, will rely on API response");
+        return true;
+    }
+
+    /**
      * Fetches detailed team information from the API
      */
     async function fetchTeamDetail(id: string | number): Promise<void> {
         try {
             loading = true;
-            error = null;
 
             const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 
             let API_URL: string;
             let headers: HeadersInit = {};
+            const token: string | undefined = import.meta.env.VITE_FOOTBALL_API_TOKEN;
 
             if (isLocalhost) {
-                const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
-                const FOOTBALL_API = `https://api.football-data.org/v2/teams/${id}`;
+                const CORS_PROXY: string = import.meta.env.VITE_CORS_PROXY_URL;
+                const FOOTBALL_API: string = `${import.meta.env.VITE_FOOTBALL_API_URL}/${id}`;
                 API_URL = CORS_PROXY + FOOTBALL_API;
                 headers = {
-                    "X-Auth-Token": import.meta.env.VITE_FOOTBALL_API_TOKEN,
+                    "X-Auth-Token": token || "",
                     "X-Requested-With": "XMLHttpRequest",
                 };
             } else {
@@ -61,13 +138,15 @@
             const response = await fetch(API_URL, { headers });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                // Handle different HTTP status codes
+                if (response.status === 404) {
+                    throw new Error("Team not found");
+                } else {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
             }
 
             team = await response.json();
-        } catch (err) {
-            error = err instanceof Error ? err.message : "Unknown error occurred";
-            console.error("Error fetching team detail:", err);
         } finally {
             loading = false;
         }
@@ -138,15 +217,23 @@
 
     // Handler functions to pass to child components
     function handleRetry(): void {
-        fetchTeamDetail(teamId);
+        validateAndFetchTeam();
     }
 </script>
 
-<!-- Loading State -->
-{#if loading}
-    <LoadingState message="Loading team details..." />
+<!-- Loading State (for validation or fetching) -->
+{#if validatingTeamId || loading}
+    <LoadingState message={validatingTeamId ? "Validating team..." : "Loading team details..."} />
 
-    <!-- Error State -->
+    <!-- Not Found State (404 errors or invalid team ID) -->
+{:else if isNotFound}
+    <NotFoundState
+        icon="🔍"
+        title="Team Not Found"
+        message="The requested team with ID {teamId} could not be found. Please check the team ID and try again."
+    />
+
+    <!-- Error State (other errors) -->
 {:else if error}
     <ErrorState {error} onRetry={handleRetry} title="Error Loading Team" />
 
@@ -161,7 +248,7 @@
     <!-- Squad Section -->
     <SquadSection {team} />
 
-    <!-- Not Found State -->
+    <!-- Fallback Not Found State -->
 {:else}
     <NotFoundState icon="🔍" title="Team Not Found" message="The requested team could not be found." />
 {/if}
