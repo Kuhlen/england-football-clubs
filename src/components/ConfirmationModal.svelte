@@ -1,5 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte";
+    import DOMPurify from "dompurify";
 
     interface Props {
         title: string;
@@ -104,6 +105,7 @@
     const currentVariant = $derived(variantStyles[variant]);
     const visiblePreviewItems = $derived(previewItems.slice(0, maxPreviewItems));
     const remainingItemsCount = $derived(Math.max(0, previewItems.length - maxPreviewItems));
+    const safeMessage = $derived(DOMPurify.sanitize(message, { ALLOWED_TAGS: ["strong", "em", "p"] }));
 </script>
 
 <div
@@ -158,7 +160,7 @@
 
             <!-- Message -->
             <div class="mb-4 text-center text-gray-300">
-                {@html message}
+                {@html safeMessage}
             </div>
 
             <!-- Preview Items (if enabled) -->
