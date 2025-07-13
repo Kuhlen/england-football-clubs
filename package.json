@@ -1,7 +1,7 @@
 {
   "name": "england-football-clubs",
   "private": true,
-  "version": "2.1.1",
+  "version": "2.2.1",
   "type": "module",
   "resolutions": {
     "yaml": "^2.4.2"
@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "4.1.11",
+    "dompurify": "^3.2.6",
     "tailwindcss": "4.1.11"
   }
 }
