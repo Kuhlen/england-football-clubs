@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { currentRoute } from "./router";
+    import { currentRoute, isValidRoute } from "./router";
     import Nav from "./components/Nav.svelte";
     import NotFound from "./pages/not-found/NotFound.svelte";
     import Home from "./pages/home/Home.svelte";
@@ -11,7 +11,9 @@
 <div class="min-h-screen">
     <Nav />
     <main>
-        {#if $currentRoute === "favorite"}
+        {#if !$isValidRoute}
+            <NotFound />
+        {:else if $currentRoute === "favorite"}
             <Favorite />
         {:else if $currentRoute === "detail"}
             <Detail />
