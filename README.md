@@ -187,10 +187,10 @@ Through this project, I've gained hands-on experience with:
 - Vercel deployment and serverless functions
 - API integration and data fetching strategies
 
----
-
 ## 📝 Update Notes
 
 When I updated this project on July 13, 2025, the details page couldn't display squads. This was because the squad key in the API https://api.football-data.org/v2/teams/{id} no longer provided squad data. However, I noticed that the API https://api.football-data.org/v4/teams/{id} provided squad data, albeit with a different schema than v2. Feel free to change it if you want to try it.
+
+---
 
 _This project represents my journey in learning modern web development with Svelte 5. It serves as both a functional application and a comprehensive learning resource._
