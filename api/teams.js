@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        const response = await fetch("https://api.football-data.org/v2/teams/", {
+        const response = await fetch(process.env.VITE_FOOTBALL_API_URL, {
             headers: {
                 "X-Auth-Token": process.env.VITE_FOOTBALL_API_TOKEN,
             },
