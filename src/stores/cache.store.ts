@@ -171,15 +171,16 @@ export const teamsService = {
 
             let API_URL: string;
             let headers: HeadersInit = {};
+            const token: string | undefined = import.meta.env.VITE_FOOTBALL_API_TOKEN;
 
             if (isVercelProduction) {
                 API_URL = "/api/teams";
             } else {
-                const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
-                const FOOTBALL_API = "https://api.football-data.org/v2/teams/";
+                const CORS_PROXY: string = import.meta.env.VITE_CORS_PROXY_URL;
+                const FOOTBALL_API: string = import.meta.env.VITE_FOOTBALL_API_URL;
                 API_URL = CORS_PROXY + FOOTBALL_API;
                 headers = {
-                    "X-Auth-Token": import.meta.env.VITE_FOOTBALL_API_TOKEN,
+                    "X-Auth-Token": token || "",
                     "X-Requested-With": "XMLHttpRequest",
                 };
             }
