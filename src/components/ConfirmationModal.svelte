@@ -105,7 +105,7 @@
     const currentVariant = $derived(variantStyles[variant]);
     const visiblePreviewItems = $derived(previewItems.slice(0, maxPreviewItems));
     const remainingItemsCount = $derived(Math.max(0, previewItems.length - maxPreviewItems));
-    const safeMessage = $derived(DOMPurify.sanitize(message, { ALLOWED_TAGS: ["strong", "em", "p"] }));
+    const safeMessage = $derived(() => DOMPurify.sanitize(message, { ALLOWED_TAGS: ["strong", "em", "p"] }));
 </script>
 
 <div
@@ -160,7 +160,7 @@
 
             <!-- Message -->
             <div class="mb-4 text-center text-gray-300">
-                {@html safeMessage}
+                {@html safeMessage()}
             </div>
 
             <!-- Preview Items (if enabled) -->
