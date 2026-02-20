@@ -42,11 +42,7 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between py-4">
             <div class="flex items-center space-x-4">
-                <div
-                    class="animate-float flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-purple-600"
-                >
-                    <i class="fas fa-futbol text-xl text-white"></i>
-                </div>
+                <i class="fas fa-futbol text-3xl text-blue-400"></i>
                 <div>
                     <h1 class="gradient-text text-2xl font-bold">Football Clubs</h1>
                     <p class="text-xs text-gray-400">England Directory</p>
